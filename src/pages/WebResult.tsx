@@ -13,6 +13,7 @@ interface WebResult {
   isSponsored: boolean;
   webResultPage: string;
   order: number;
+  lid?: number;
 }
 
 const WebResult = () => {
@@ -49,6 +50,7 @@ const WebResult = () => {
             isSponsored: true,
             webResultPage: "wr=1",
             order: 1,
+            lid: 1,
           },
           {
             id: "2",
@@ -60,6 +62,7 @@ const WebResult = () => {
             isSponsored: false,
             webResultPage: "wr=1",
             order: 2,
+            lid: 2,
           },
         ];
         setResults(defaultResults);
@@ -111,27 +114,23 @@ const WebResult = () => {
                         <span className="text-xs text-muted-foreground">Sponsored</span>
                       </div>
                       <a
-                        href={result.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        href={`/lid=${result.lid || result.id}`}
                         className="text-xl font-medium text-primary hover:underline inline-flex items-center gap-2 group"
                       >
                         {result.title}
                       </a>
                       <p className="text-sm text-muted-foreground mt-1">{result.description}</p>
                       <a
-                        href={result.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        href={`/lid=${result.lid || result.id}`}
                         className="text-sm text-primary/80 hover:text-primary hover:underline mt-2 inline-block"
                       >
-                        {result.link}
+                        offergrabzone.com/lid={result.lid || result.id}
                       </a>
                       <Button
                         variant="default"
                         size="sm"
                         className="mt-3"
-                        onClick={() => window.open(result.link, "_blank")}
+                        onClick={() => window.location.href = `/lid=${result.lid || result.id}`}
                       >
                         <ExternalLink className="h-4 w-4 mr-2" />
                         Visit Website
@@ -166,21 +165,17 @@ const WebResult = () => {
                     <div className="flex-1">
                       <p className="text-sm text-muted-foreground">{result.name}</p>
                       <a
-                        href={result.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        href={`/lid=${result.lid || result.id}`}
                         className="text-xl font-medium text-primary hover:underline"
                       >
                         {result.title}
                       </a>
                       <p className="text-sm text-foreground mt-1">{result.description}</p>
                       <a
-                        href={result.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        href={`/lid=${result.lid || result.id}`}
                         className="text-sm text-primary/80 hover:text-primary hover:underline mt-1 inline-block"
                       >
-                        {result.link}
+                        offergrabzone.com/lid={result.lid || result.id}
                       </a>
                     </div>
                   </div>

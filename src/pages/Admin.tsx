@@ -39,6 +39,7 @@ interface WebResult {
   isSponsored: boolean;
   webResultPage: string;
   order: number;
+  lid?: number;
 }
 
 const Admin = () => {
@@ -139,10 +140,13 @@ const Admin = () => {
       toast.error("Name and title are required");
       return;
     }
+    // Generate next available lid
+    const maxLid = webResults.reduce((max, r) => Math.max(max, r.lid || 0), 0);
     const result: WebResult = {
       id: Date.now().toString(),
       ...newResult,
       order: webResults.filter((r) => r.webResultPage === newResult.webResultPage).length + 1,
+      lid: maxLid + 1,
     };
     const updated = [...webResults, result];
     setWebResults(updated);
