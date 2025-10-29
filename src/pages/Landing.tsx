@@ -19,8 +19,8 @@ interface SearchButton {
 const Landing = () => {
   const navigate = useNavigate();
   const [content, setContent] = useState<LandingContent>({
-    title: "Top University Territian - Your Guide to Academic Excellence",
-    description: "Discover comprehensive information about top universities worldwide. Whether you're exploring higher education options, comparing institutions, or seeking admission guidance, Top University Territian provides you with detailed insights and resources to make informed decisions about your academic future.",
+    title: "OfferGrabZone - Find Amazing Deals and Discounts",
+    description: "Discover the best offers, deals, and discounts from top brands and retailers. Whether you are shopping for electronics, fashion, home essentials, or travel packages, OfferGrabZone brings you exclusive deals and promotional offers to help you save money on every purchase.",
   });
   const [searchButtons, setSearchButtons] = useState<SearchButton[]>([]);
 
@@ -36,11 +36,11 @@ const Landing = () => {
       setSearchButtons(buttons.sort((a: SearchButton, b: SearchButton) => a.order - b.order));
     } else {
       const defaultButtons: SearchButton[] = [
-        { id: "1", title: "Top Universities Rankings", link: "", webResultPage: "wr=1", order: 1 },
-        { id: "2", title: "Admission Requirements", link: "", webResultPage: "wr=2", order: 2 },
-        { id: "3", title: "Scholarship Opportunities", link: "", webResultPage: "wr=3", order: 3 },
-        { id: "4", title: "Campus Life and Facilities", link: "", webResultPage: "wr=4", order: 4 },
-        { id: "5", title: "Career Prospects and Alumni", link: "", webResultPage: "wr=5", order: 5 },
+        { id: "1", title: "Electronics & Gadgets Deals", link: "", webResultPage: "wr=1", order: 1 },
+        { id: "2", title: "Fashion & Apparel Offers", link: "", webResultPage: "wr=2", order: 2 },
+        { id: "3", title: "Home & Kitchen Discounts", link: "", webResultPage: "wr=3", order: 3 },
+        { id: "4", title: "Travel & Hotel Packages", link: "", webResultPage: "wr=4", order: 4 },
+        { id: "5", title: "Food & Dining Vouchers", link: "", webResultPage: "wr=5", order: 5 },
       ];
       setSearchButtons(defaultButtons);
       localStorage.setItem("searchButtons", JSON.stringify(defaultButtons));
@@ -59,7 +59,7 @@ const Landing = () => {
     <div className="min-h-screen bg-background">
       <header className="border-b border-border/40 bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-xl font-bold text-primary">TopUniversityTerritian</h1>
+          <h1 className="text-xl font-bold text-primary">OfferGrabZone</h1>
           <Button
             variant="ghost"
             size="icon"

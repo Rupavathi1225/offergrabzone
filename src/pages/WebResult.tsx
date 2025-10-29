@@ -41,22 +41,22 @@ const WebResult = () => {
         const defaultResults: WebResult[] = [
           {
             id: "1",
-            name: "Harvard University",
-            link: "https://harvard.edu",
-            title: "Harvard University - Official Site",
-            description: "Explore one of the world's most prestigious universities offering diverse academic programs and research opportunities.",
-            logoUrl: "https://logo.clearbit.com/harvard.edu",
+            name: "Amazon",
+            link: "https://amazon.com",
+            title: "Amazon Electronics - Up to 50% Off",
+            description: "Shop the latest electronics and gadgets with massive discounts. Find smartphones, laptops, tablets, and accessories at unbeatable prices.",
+            logoUrl: "https://logo.clearbit.com/amazon.com",
             isSponsored: true,
             webResultPage: "wr=1",
             order: 1,
           },
           {
             id: "2",
-            name: "MIT",
-            link: "https://mit.edu",
-            title: "MIT - Massachusetts Institute of Technology",
-            description: "Leading institution in science, technology, and innovation with cutting-edge research facilities.",
-            logoUrl: "https://logo.clearbit.com/mit.edu",
+            name: "Best Buy",
+            link: "https://bestbuy.com",
+            title: "Best Buy Daily Deals - Save Big on Tech",
+            description: "Discover amazing deals on electronics, home appliances, and entertainment systems. Limited time offers on top brands.",
+            logoUrl: "https://logo.clearbit.com/bestbuy.com",
             isSponsored: false,
             webResultPage: "wr=1",
             order: 2,
@@ -82,7 +82,7 @@ const WebResult = () => {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-xl font-bold text-primary">TopUniversityTerritian</h1>
+          <h1 className="text-xl font-bold text-primary">OfferGrabZone</h1>
         </div>
       </header>
 
