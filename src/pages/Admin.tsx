@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Trash2, Edit, Plus, ExternalLink, ArrowUp, ArrowDown } from "lucide-react";
+import { Trash2, Edit, Plus, ExternalLink, ArrowUp, ArrowDown, BarChart3 } from "lucide-react";
 import { toast } from "sonner";
 import {
   Select,
@@ -64,6 +64,8 @@ const Admin = () => {
 
   const [editingButton, setEditingButton] = useState<string | null>(null);
   const [editingResult, setEditingResult] = useState<string | null>(null);
+  const [linkClicks, setLinkClicks] = useState<any[]>([]);
+  const [sessionDurations, setSessionDurations] = useState<any[]>([]);
 
   useEffect(() => {
     loadData();
@@ -83,6 +85,16 @@ const Admin = () => {
     const savedResults = localStorage.getItem("webResults");
     if (savedResults) {
       setWebResults(JSON.parse(savedResults));
+    }
+
+    const savedClicks = localStorage.getItem("linkClicks");
+    if (savedClicks) {
+      setLinkClicks(JSON.parse(savedClicks));
+    }
+
+    const savedSessions = localStorage.getItem("sessionDurations");
+    if (savedSessions) {
+      setSessionDurations(JSON.parse(savedSessions));
     }
   };
 
@@ -205,6 +217,18 @@ const Admin = () => {
     toast.success("Result order updated!");
   };
 
+  const clearLinkClicks = () => {
+    localStorage.removeItem("linkClicks");
+    setLinkClicks([]);
+    toast.success("Link clicks data cleared!");
+  };
+
+  const clearSessionDurations = () => {
+    localStorage.removeItem("sessionDurations");
+    setSessionDurations([]);
+    toast.success("Session duration data cleared!");
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border/40 bg-card/50 backdrop-blur-sm sticky top-0 z-50">
@@ -221,10 +245,14 @@ const Admin = () => {
 
       <main className="container mx-auto px-4 py-8 max-w-6xl">
         <Tabs defaultValue="landing" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 bg-card">
+          <TabsList className="grid w-full grid-cols-4 bg-card">
             <TabsTrigger value="landing">Landing Content</TabsTrigger>
             <TabsTrigger value="buttons">Search Buttons</TabsTrigger>
             <TabsTrigger value="results">Web Results</TabsTrigger>
+            <TabsTrigger value="analytics">
+              <BarChart3 className="h-4 w-4 mr-2" />
+              Analytics
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="landing" className="space-y-6">
@@ -525,6 +553,131 @@ const Admin = () => {
                     </div>
                   );
                 })}
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="analytics" className="space-y-6">
+            <div className="bg-card border border-primary/30 rounded-lg p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <BarChart3 className="h-6 w-6 text-primary" />
+                <h2 className="text-2xl font-bold text-foreground">Analytics & Tracking</h2>
+              </div>
+
+              {/* Link Clicks Section */}
+              <div className="mb-8">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-semibold text-foreground">Link Clicks</h3>
+                  <div className="flex items-center gap-3">
+                    <div className="text-sm text-muted-foreground">
+                      Total Clicks: {linkClicks.length}
+                    </div>
+                    {linkClicks.length > 0 && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={clearLinkClicks}
+                      >
+                        Clear Data
+                      </Button>
+                    )}
+                  </div>
+                </div>
+                {linkClicks.length > 0 ? (
+                  <div className="overflow-x-auto">
+                    <table className="w-full border border-border/40 rounded-lg">
+                      <thead className="bg-secondary/30">
+                        <tr>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-foreground">LID</th>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Result Name</th>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Title</th>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Destination URL</th>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Date & Time</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {linkClicks
+                          .sort((a, b) => b.timestamp - a.timestamp)
+                          .map((click, index) => (
+                            <tr key={index} className="border-t border-border/40 hover:bg-secondary/20">
+                              <td className="px-4 py-3 text-sm text-foreground">{click.lid}</td>
+                              <td className="px-4 py-3 text-sm text-foreground">{click.resultName || "N/A"}</td>
+                              <td className="px-4 py-3 text-sm text-foreground">{click.resultTitle || "N/A"}</td>
+                              <td className="px-4 py-3 text-sm text-primary hover:underline">
+                                <a href={click.destinationUrl} target="_blank" rel="noopener noreferrer">
+                                  {click.destinationUrl}
+                                </a>
+                              </td>
+                              <td className="px-4 py-3 text-sm text-muted-foreground">
+                                {new Date(click.timestamp).toLocaleString()}
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="text-center py-12 bg-secondary/10 rounded-lg">
+                    <p className="text-muted-foreground">No link clicks tracked yet.</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Session Duration Section */}
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-semibold text-foreground">Session Duration</h3>
+                  <div className="flex items-center gap-3">
+                    <div className="text-sm text-muted-foreground">
+                      Total Sessions: {sessionDurations.length}
+                    </div>
+                    {sessionDurations.length > 0 && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={clearSessionDurations}
+                      >
+                        Clear Data
+                      </Button>
+                    )}
+                  </div>
+                </div>
+                {sessionDurations.length > 0 ? (
+                  <div className="overflow-x-auto">
+                    <table className="w-full border border-border/40 rounded-lg">
+                      <thead className="bg-secondary/30">
+                        <tr>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Page</th>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Duration (seconds)</th>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Duration (ms)</th>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Date & Time</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {sessionDurations
+                          .sort((a, b) => b.timestamp - a.timestamp)
+                          .map((session, index) => (
+                            <tr key={index} className="border-t border-border/40 hover:bg-secondary/20">
+                              <td className="px-4 py-3 text-sm font-medium text-primary">/{session.page}</td>
+                              <td className="px-4 py-3 text-sm text-foreground">
+                                {session.durationSeconds || Math.floor(session.durationMs / 1000)}s
+                              </td>
+                              <td className="px-4 py-3 text-sm text-muted-foreground">
+                                {session.durationMs}ms
+                              </td>
+                              <td className="px-4 py-3 text-sm text-muted-foreground">
+                                {new Date(session.timestamp).toLocaleString()}
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="text-center py-12 bg-secondary/10 rounded-lg">
+                    <p className="text-muted-foreground">No session data tracked yet.</p>
+                  </div>
+                )}
               </div>
             </div>
           </TabsContent>
