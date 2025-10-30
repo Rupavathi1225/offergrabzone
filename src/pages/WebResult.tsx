@@ -154,6 +154,15 @@ const WebResult = () => {
                       >
                         offergrabzone.com/lid={result.lid || result.id}
                       </a>
+                      <div className="mt-4">
+                        <Button
+                          onClick={() => window.location.href = `/lid=${result.lid || result.id}`}
+                          className="gap-2"
+                        >
+                          <ExternalLink className="h-4 w-4" />
+                          Visit Website
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
