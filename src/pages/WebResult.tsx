@@ -73,6 +73,34 @@ const WebResult = () => {
     }
   }, [currentPage]);
 
+  // Track session duration on this page
+  useEffect(() => {
+    const sessionStartTime = Date.now();
+    
+    const handleBeforeUnload = () => {
+      const sessionEndTime = Date.now();
+      const durationMs = sessionEndTime - sessionStartTime;
+      
+      const sessionData = {
+        page: currentPage,
+        durationMs,
+        durationSeconds: Math.floor(durationMs / 1000),
+        timestamp: sessionEndTime,
+        date: new Date(sessionEndTime).toISOString(),
+      };
+      
+      const existingSessions = JSON.parse(localStorage.getItem("sessionDurations") || "[]");
+      localStorage.setItem("sessionDurations", JSON.stringify([...existingSessions, sessionData]));
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      handleBeforeUnload(); // Also log when component unmounts
+    };
+  }, [currentPage]);
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border/40 bg-card/50 backdrop-blur-sm sticky top-0 z-50">
@@ -93,16 +121,16 @@ const WebResult = () => {
         {sponsoredResults.length > 0 && (
           <div className="mb-12">
             <h2 className="text-sm font-medium text-muted-foreground mb-6">Sponsored Results</h2>
-            <div className="space-y-6">
+            <div className="space-y-8">
               {sponsoredResults.map((result) => (
-                <div key={result.id} className="space-y-3">
+                <div key={result.id} className="space-y-2">
                   <div className="flex items-start gap-3">
                     {result.logoUrl && (
-                      <div className="w-8 h-8 rounded-full bg-muted/30 flex items-center justify-center overflow-hidden flex-shrink-0">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
                         <img
                           src={result.logoUrl}
                           alt={result.name}
-                          className="w-6 h-6 object-contain"
+                          className="w-8 h-8 object-contain"
                           onError={(e) => {
                             e.currentTarget.style.display = "none";
                           }}
@@ -115,26 +143,17 @@ const WebResult = () => {
                       </div>
                       <a
                         href={`/lid=${result.lid || result.id}`}
-                        className="text-xl font-medium text-primary hover:underline inline-flex items-center gap-2 group"
+                        className="text-xl font-medium text-primary hover:underline block"
                       >
                         {result.title}
                       </a>
-                      <p className="text-sm text-muted-foreground mt-1">{result.description}</p>
+                      <p className="text-sm text-foreground/80 mt-2">{result.description}</p>
                       <a
                         href={`/lid=${result.lid || result.id}`}
-                        className="text-sm text-primary/80 hover:text-primary hover:underline mt-2 inline-block"
+                        className="text-sm text-primary/70 hover:text-primary mt-2 inline-block"
                       >
                         offergrabzone.com/lid={result.lid || result.id}
                       </a>
-                      <Button
-                        variant="default"
-                        size="sm"
-                        className="mt-3"
-                        onClick={() => window.location.href = `/lid=${result.lid || result.id}`}
-                      >
-                        <ExternalLink className="h-4 w-4 mr-2" />
-                        Visit Website
-                      </Button>
                     </div>
                   </div>
                 </div>
@@ -146,16 +165,16 @@ const WebResult = () => {
         {regularResults.length > 0 && (
           <div>
             <h2 className="text-sm font-medium text-muted-foreground mb-6">Web Results</h2>
-            <div className="space-y-6">
+            <div className="space-y-8">
               {regularResults.map((result) => (
                 <div key={result.id} className="space-y-2">
                   <div className="flex items-start gap-3">
                     {result.logoUrl && (
-                      <div className="w-6 h-6 rounded-full bg-muted/30 flex items-center justify-center overflow-hidden flex-shrink-0 mt-1">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
                         <img
                           src={result.logoUrl}
                           alt={result.name}
-                          className="w-4 h-4 object-contain"
+                          className="w-8 h-8 object-contain"
                           onError={(e) => {
                             e.currentTarget.style.display = "none";
                           }}
@@ -163,17 +182,16 @@ const WebResult = () => {
                       </div>
                     )}
                     <div className="flex-1">
-                      <p className="text-sm text-muted-foreground">{result.name}</p>
                       <a
                         href={`/lid=${result.lid || result.id}`}
-                        className="text-xl font-medium text-primary hover:underline"
+                        className="text-xl font-medium text-primary hover:underline block"
                       >
                         {result.title}
                       </a>
-                      <p className="text-sm text-foreground mt-1">{result.description}</p>
+                      <p className="text-sm text-foreground/80 mt-2">{result.description}</p>
                       <a
                         href={`/lid=${result.lid || result.id}`}
-                        className="text-sm text-primary/80 hover:text-primary hover:underline mt-1 inline-block"
+                        className="text-sm text-primary/70 hover:text-primary mt-2 inline-block"
                       >
                         offergrabzone.com/lid={result.lid || result.id}
                       </a>

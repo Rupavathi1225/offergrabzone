@@ -17,6 +17,20 @@ const Redirect = () => {
         const result = allResults.find((r: any) => r.lid === lid || r.id === lid.toString());
         
         if (result && result.link) {
+          // Track the click before redirecting
+          const clickData = {
+            lid: lid,
+            destinationUrl: result.link,
+            timestamp: Date.now(),
+            date: new Date().toISOString(),
+            resultName: result.name,
+            resultTitle: result.title,
+          };
+          
+          const existingClicks = JSON.parse(localStorage.getItem("linkClicks") || "[]");
+          localStorage.setItem("linkClicks", JSON.stringify([...existingClicks, clickData]));
+          
+          // Redirect to actual URL
           window.location.href = result.link;
           return;
         }
