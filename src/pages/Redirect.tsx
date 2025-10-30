@@ -17,8 +17,17 @@ const Redirect = () => {
         const result = allResults.find((r: any) => r.lid === lid || r.id === lid.toString());
         
         if (result && result.link) {
+          // Get or create session ID
+          let sessionId = sessionStorage.getItem("userSessionId");
+          if (!sessionId) {
+            sessionId = `SID-${Math.random().toString(36).substr(2, 9)}`;
+            sessionStorage.setItem("userSessionId", sessionId);
+          }
+
           // Track the click before redirecting
           const clickData = {
+            sessionId: sessionId,
+            linkId: `oid=${lid}`,
             lid: lid,
             destinationUrl: result.link,
             timestamp: Date.now(),

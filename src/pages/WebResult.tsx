@@ -73,6 +73,15 @@ const WebResult = () => {
     }
   }, [currentPage]);
 
+  // Generate or retrieve session ID
+  useEffect(() => {
+    let sessionId = sessionStorage.getItem("userSessionId");
+    if (!sessionId) {
+      sessionId = `SID-${Math.random().toString(36).substr(2, 9)}`;
+      sessionStorage.setItem("userSessionId", sessionId);
+    }
+  }, []);
+
   // Track session duration on this page
   useEffect(() => {
     const sessionStartTime = Date.now();

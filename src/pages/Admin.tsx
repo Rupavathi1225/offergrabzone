@@ -564,13 +564,19 @@ const Admin = () => {
                 <h2 className="text-2xl font-bold text-foreground">Analytics & Tracking</h2>
               </div>
 
-              {/* Link Clicks Section */}
+              {/* Session-Based Tracking Section */}
               <div className="mb-8">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-semibold text-foreground">Link Clicks</h3>
+                  <h3 className="text-xl font-semibold text-foreground">Session Tracking (All Users)</h3>
                   <div className="flex items-center gap-3">
                     <div className="text-sm text-muted-foreground">
-                      Total Clicks: {linkClicks.length}
+                      Total Sessions: {(() => {
+                        const sessions = new Set();
+                        linkClicks.forEach((click: any) => {
+                          if (click.sessionId) sessions.add(click.sessionId);
+                        });
+                        return sessions.size;
+                      })()}
                     </div>
                     {linkClicks.length > 0 && (
                       <Button
@@ -588,37 +594,56 @@ const Admin = () => {
                     <table className="w-full border border-border/40 rounded-lg">
                       <thead className="bg-secondary/30">
                         <tr>
-                          <th className="px-4 py-3 text-left text-sm font-medium text-foreground">LID</th>
-                          <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Result Name</th>
-                          <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Title</th>
-                          <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Destination URL</th>
-                          <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Date & Time</th>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Session ID</th>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Link ID</th>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Click Count</th>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Last Clicked</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {linkClicks
-                          .sort((a, b) => b.timestamp - a.timestamp)
-                          .map((click, index) => (
-                            <tr key={index} className="border-t border-border/40 hover:bg-secondary/20">
-                              <td className="px-4 py-3 text-sm text-foreground">{click.lid}</td>
-                              <td className="px-4 py-3 text-sm text-foreground">{click.resultName || "N/A"}</td>
-                              <td className="px-4 py-3 text-sm text-foreground">{click.resultTitle || "N/A"}</td>
-                              <td className="px-4 py-3 text-sm text-primary hover:underline">
-                                <a href={click.destinationUrl} target="_blank" rel="noopener noreferrer">
-                                  {click.destinationUrl}
-                                </a>
-                              </td>
-                              <td className="px-4 py-3 text-sm text-muted-foreground">
-                                {new Date(click.timestamp).toLocaleString()}
-                              </td>
-                            </tr>
-                          ))}
+                        {(() => {
+                          // Aggregate clicks by session and link
+                          const aggregated: { [key: string]: any } = {};
+                          
+                          linkClicks.forEach((click: any) => {
+                            const key = `${click.sessionId || 'unknown'}_${click.linkId || click.lid}`;
+                            if (!aggregated[key]) {
+                              aggregated[key] = {
+                                sessionId: click.sessionId || 'Unknown',
+                                linkId: click.linkId || `oid=${click.lid}`,
+                                clickCount: 0,
+                                lastClicked: click.timestamp,
+                                lastClickedDate: click.date,
+                              };
+                            }
+                            aggregated[key].clickCount++;
+                            if (click.timestamp > aggregated[key].lastClicked) {
+                              aggregated[key].lastClicked = click.timestamp;
+                              aggregated[key].lastClickedDate = click.date;
+                            }
+                          });
+
+                          return Object.values(aggregated)
+                            .sort((a: any, b: any) => b.lastClicked - a.lastClicked)
+                            .map((item: any, index: number) => (
+                              <tr key={index} className="border-t border-border/40 hover:bg-secondary/20">
+                                <td className="px-4 py-3 text-sm font-mono text-foreground">
+                                  {item.sessionId}
+                                </td>
+                                <td className="px-4 py-3 text-sm text-foreground">{item.linkId}</td>
+                                <td className="px-4 py-3 text-sm text-foreground font-semibold">{item.clickCount}</td>
+                                <td className="px-4 py-3 text-sm text-muted-foreground">
+                                  {new Date(item.lastClickedDate).toLocaleString()}
+                                </td>
+                              </tr>
+                            ));
+                        })()}
                       </tbody>
                     </table>
                   </div>
                 ) : (
                   <div className="text-center py-12 bg-secondary/10 rounded-lg">
-                    <p className="text-muted-foreground">No link clicks tracked yet.</p>
+                    <p className="text-muted-foreground">No tracking data available yet.</p>
                   </div>
                 )}
               </div>
