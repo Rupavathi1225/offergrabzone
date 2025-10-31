@@ -97,8 +97,8 @@ const Landing = () => {
               variant="outline"
               className="flex items-center gap-2 text-primary border-primary/40 hover:bg-primary/10"
             >
-              <ArrowUpRight className="h-4 w-4" />
-              Explore Offer
+              <ArrowUpRight className="h-12 w-12" />
+              Click here for offers 
             </Button>
           </div>
         </div>
