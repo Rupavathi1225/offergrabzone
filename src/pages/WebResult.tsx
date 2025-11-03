@@ -43,7 +43,7 @@ const WebResult = () => {
           {
             id: "1",
             name: "Amazon",
-            link: "https://amazon.com",
+            link: "https://www.amazon.com/deals",
             title: "Amazon Electronics - Up to 50% Off",
             description: "Shop the latest electronics and gadgets with massive discounts. Find smartphones, laptops, tablets, and accessories at unbeatable prices.",
             logoUrl: "https://logo.clearbit.com/amazon.com",
@@ -55,7 +55,7 @@ const WebResult = () => {
           {
             id: "2",
             name: "Best Buy",
-            link: "https://bestbuy.com",
+            link: "https://www.bestbuy.com",
             title: "Best Buy Daily Deals - Save Big on Tech",
             description: "Discover amazing deals on electronics, home appliances, and entertainment systems. Limited time offers on top brands.",
             logoUrl: "https://logo.clearbit.com/bestbuy.com",

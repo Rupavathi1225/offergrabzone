@@ -8,13 +8,21 @@ const Redirect = () => {
   useEffect(() => {
     const lidMatch = location.pathname.match(/\/lid=(\d+)/);
     
+    console.log("Redirect - pathname:", location.pathname);
+    console.log("Redirect - lidMatch:", lidMatch);
+    
     if (lidMatch) {
       const lid = parseInt(lidMatch[1]);
+      console.log("Redirect - lid:", lid);
+      
       const savedResults = localStorage.getItem("webResults");
+      console.log("Redirect - savedResults:", savedResults);
       
       if (savedResults) {
         const allResults = JSON.parse(savedResults);
         const result = allResults.find((r: any) => r.lid === lid || r.id === lid.toString());
+        
+        console.log("Redirect - found result:", result);
         
         if (result && result.link) {
           // Get or create session ID
@@ -39,6 +47,8 @@ const Redirect = () => {
           const existingClicks = JSON.parse(localStorage.getItem("linkClicks") || "[]");
           localStorage.setItem("linkClicks", JSON.stringify([...existingClicks, clickData]));
           
+          console.log("Redirect - redirecting to:", result.link);
+          
           // Redirect to actual URL
           window.location.href = result.link;
           return;
@@ -47,6 +57,7 @@ const Redirect = () => {
     }
     
     // If no match found, redirect to home
+    console.log("Redirect - no match, going to home");
     navigate("/");
   }, [location, navigate]);
 
