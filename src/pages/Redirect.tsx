@@ -6,9 +6,10 @@ const Redirect = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const lidMatch = location.pathname.match(/\/lid=(\d+)/);
-    
+    console.log("Redirect component mounted!");
     console.log("Redirect - pathname:", location.pathname);
+    
+    const lidMatch = location.pathname.match(/\/lid=(\d+)/);
     console.log("Redirect - lidMatch:", lidMatch);
     
     if (lidMatch) {
@@ -20,6 +21,7 @@ const Redirect = () => {
       
       if (savedResults) {
         const allResults = JSON.parse(savedResults);
+        console.log("Redirect - allResults:", allResults);
         const result = allResults.find((r: any) => r.lid === lid || r.id === lid.toString());
         
         console.log("Redirect - found result:", result);
@@ -52,8 +54,14 @@ const Redirect = () => {
           // Redirect to actual URL
           window.location.href = result.link;
           return;
+        } else {
+          console.log("Redirect - result not found or no link");
         }
+      } else {
+        console.log("Redirect - no saved results in localStorage");
       }
+    } else {
+      console.log("Redirect - no lid match in pathname");
     }
     
     // If no match found, redirect to home

@@ -25,7 +25,7 @@ const App = () => (
           <Route path="/wr=4" element={<WebResult />} />
           <Route path="/wr=5" element={<WebResult />} />
           <Route path="/admin" element={<Admin />} />
-          <Route path="/lid=*" element={<Redirect />} />
+          <Route path="/lid=:lid" element={<Redirect />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
