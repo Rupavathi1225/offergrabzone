@@ -61,7 +61,7 @@ const Landing = () => {
   // 🔗 Arrow button click handler
   const handleArrowClick = () => {
     window.open(
-      "https://nipholder.com/irnxhbri5a?key=ca71564220098e966cc7eec56b08df72",
+      "https://www.amazon.com/deals",
       "_blank"
     );
   };

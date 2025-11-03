@@ -134,18 +134,26 @@ const WebResult = () => {
               {sponsoredResults.map((result) => (
                 <div key={result.id} className="space-y-2">
                   <div className="flex items-start gap-3">
-                    {result.logoUrl && (
-                      <div className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-primary/10 border border-primary/20">
+                      {result.logoUrl ? (
                         <img
                           src={result.logoUrl}
                           alt={result.name}
-                          className="w-8 h-8 object-contain"
+                          className="w-8 h-8 object-contain rounded-full"
                           onError={(e) => {
+                            const parent = e.currentTarget.parentElement;
                             e.currentTarget.style.display = "none";
+                            if (parent) {
+                              parent.innerHTML = `<span class="text-sm font-semibold text-primary">${result.name.charAt(0).toUpperCase()}</span>`;
+                            }
                           }}
                         />
-                      </div>
-                    )}
+                      ) : (
+                        <span className="text-sm font-semibold text-primary">
+                          {result.name.charAt(0).toUpperCase()}
+                        </span>
+                      )}
+                    </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <span className="text-xs text-muted-foreground">Sponsored</span>
@@ -187,18 +195,26 @@ const WebResult = () => {
               {regularResults.map((result) => (
                 <div key={result.id} className="space-y-2">
                   <div className="flex items-start gap-3">
-                    {result.logoUrl && (
-                      <div className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-primary/10 border border-primary/20">
+                      {result.logoUrl ? (
                         <img
                           src={result.logoUrl}
                           alt={result.name}
-                          className="w-8 h-8 object-contain"
+                          className="w-8 h-8 object-contain rounded-full"
                           onError={(e) => {
+                            const parent = e.currentTarget.parentElement;
                             e.currentTarget.style.display = "none";
+                            if (parent) {
+                              parent.innerHTML = `<span class="text-sm font-semibold text-primary">${result.name.charAt(0).toUpperCase()}</span>`;
+                            }
                           }}
                         />
-                      </div>
-                    )}
+                      ) : (
+                        <span className="text-sm font-semibold text-primary">
+                          {result.name.charAt(0).toUpperCase()}
+                        </span>
+                      )}
+                    </div>
                     <div className="flex-1">
                       <a
                         href={`/lid=${result.lid || result.id}`}
