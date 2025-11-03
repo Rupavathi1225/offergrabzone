@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -158,22 +158,22 @@ const WebResult = () => {
                       <div className="flex items-center gap-2 mb-1">
                         <span className="text-xs text-muted-foreground">Sponsored</span>
                       </div>
-                      <a
-                        href={`/lid=${result.lid || result.id}`}
+                      <Link
+                        to={`/lid=${result.lid || result.id}`}
                         className="text-xl font-medium text-primary hover:underline block"
                       >
                         {result.title}
-                      </a>
+                      </Link>
                       <p className="text-sm text-foreground/80 mt-2">{result.description}</p>
-                      <a
-                        href={`/lid=${result.lid || result.id}`}
+                      <Link
+                        to={`/lid=${result.lid || result.id}`}
                         className="text-sm text-primary/70 hover:text-primary mt-2 inline-block"
                       >
                         offergrabzone.com/lid={result.lid || result.id}
-                      </a>
+                      </Link>
                       <div className="mt-4">
                         <Button
-                          onClick={() => window.location.href = `/lid=${result.lid || result.id}`}
+                          onClick={() => navigate(`/lid=${result.lid || result.id}`)}
                           className="gap-2"
                         >
                           <ExternalLink className="h-4 w-4" />
@@ -216,19 +216,19 @@ const WebResult = () => {
                       )}
                     </div>
                     <div className="flex-1">
-                      <a
-                        href={`/lid=${result.lid || result.id}`}
+                      <Link
+                        to={`/lid=${result.lid || result.id}`}
                         className="text-xl font-medium text-primary hover:underline block"
                       >
                         {result.title}
-                      </a>
+                      </Link>
                       <p className="text-sm text-foreground/80 mt-2">{result.description}</p>
-                      <a
-                        href={`/lid=${result.lid || result.id}`}
+                      <Link
+                        to={`/lid=${result.lid || result.id}`}
                         className="text-sm text-primary/70 hover:text-primary mt-2 inline-block"
                       >
                         offergrabzone.com/lid={result.lid || result.id}
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>
